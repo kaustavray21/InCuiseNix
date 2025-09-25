@@ -1,0 +1,156 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<style>
+    .note-card-link {
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+    }
+    .note-card-link .card:hover {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        
+        <div class="col-lg-3">
+            <h4 class="mb-3">Course Playlist</h4>
+            <div class="list-group" style="max-height: 80vh; overflow-y: auto;">
+                {% for video in all_videos %}
+                <a href="{% url 'video_player' course.id %}?vid={{ video.video_id }}" 
+                   class="list-group-item list-group-item-action {% if video.id == current_video.id %}active{% endif %}">
+                    {{ video.title }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <h2 class="mb-3">{{ course.title }}</h2>
+            <div class="ratio ratio-16x9 mb-3">
+                <div id="youtube-player"></div>
+            </div>
+            <h4 class="mb-3">{{ current_video.title }}</h4>
+            
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal">
+              Add Note
+            </button>
+            <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#notesOffcanvas" aria-controls="notesOffcanvas">
+              View Notes
+            </button>
+            <hr>
+            <p class="text-muted">Use the buttons above to manage your notes for this video.</p>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="notesOffcanvas" aria-labelledby="notesOffcanvasLabel">
+  <div class="offcanvas-header">
+    <h5 id="notesOffcanvasLabel">My Notes for "{{ current_video.title }}"</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    {% for note in notes %}
+        <a href="#" class="note-card-link" data-bs-toggle="modal" data-bs-target="#viewNoteModal" 
+           data-bs-note-content="{{ note.content }}" 
+           data-bs-note-meta="Timestamp: {{ note.video_timestamp }}s &mdash; Added on: {{ note.created_at|date:'d M Y, H:i' }}">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <p class="card-text text-truncate">{{ note.content }}</p>
+                    <p class="card-subtitle text-muted small">
+                        Timestamp: {{ note.video_timestamp }}s
+                    </p>
+                </div>
+            </div>
+        </a>
+    {% empty %}
+        <p class="text-muted">You have no notes for this video yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="modal fade" id="viewNoteModal" tabindex="-1" aria-labelledby="viewNoteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewNoteModalLabel">Note Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p style="white-space: pre-wrap;"></p>
+      </div>
+       <div class="modal-footer">
+          <small class="text-muted me-auto" id="viewNoteModalMeta"></small>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addNoteModalLabel">Add a Note</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+            {{ form.video_timestamp }}
+            <div class="mb-3">
+                <label for="{{ form.content.id_for_label }}" class="form-label">Note Content</label>
+                {{ form.content }}
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save Note</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+    let player;
+    const initialVideoId = '{{ current_video.video_url|slice:"-11:" }}';
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-player', {
+            height: '100%',
+            width: '100%',
+            videoId: initialVideoId,
+        });
+    }
+
+    const addNoteModal = document.getElementById('addNoteModal');
+    addNoteModal.addEventListener('show.bs.modal', function (event) {
+        if (player && typeof player.pauseVideo === 'function') {
+            player.pauseVideo();
+        }
+        if (player && typeof player.getCurrentTime === 'function') {
+            const currentTime = Math.round(player.getCurrentTime());
+            const timestampInput = document.getElementById('{{ form.video_timestamp.id_for_label }}');
+            timestampInput.value = currentTime;
+        }
+    });
+
+    const viewNoteModal = document.getElementById('viewNoteModal');
+    viewNoteModal.addEventListener('show.bs.modal', function (event) {
+        const triggerElement = event.relatedTarget;
+        const noteContent = triggerElement.getAttribute('data-bs-note-content');
+        const noteMeta = triggerElement.getAttribute('data-bs-note-meta');
+        
+        const modalBody = viewNoteModal.querySelector('.modal-body p');
+        const modalMeta = viewNoteModal.querySelector('#viewNoteModalMeta');
+        
+        modalBody.textContent = noteContent;
+        modalMeta.textContent = noteMeta;
+    });
+</script>
+{% endblock %}

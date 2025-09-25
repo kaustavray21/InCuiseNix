@@ -5,21 +5,32 @@
     "description": "A comprehensive introduction to the Python programming language.",
     "image_url": "https://placehold.co/600x400/000000/FFFFFF?text=Python",
     "videos": [
-      {
-        "video_id": "py01",
-        "title": "Introduction to Python",
-        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-      },
-      {
-        "video_id": "py02",
-        "title": "Variables and Data Types",
-        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-      },
-      {
-        "video_id": "py03",
-        "title": "Control Flow (If-Else)",
-        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-      }
+      { "video_id": "py01", "title": "Part 1: Introduction", "video_url": "https://www.youtube.com/embed/xAcTmDO6NTI" },
+      { "video_id": "py02", "title": "Part 2: Variables", "video_url": "https://www.youtube.com/embed/UdEX0E9lIQM" },
+      { "video_id": "py03", "title": "Part 3: Data Types", "video_url": "https://www.youtube.com/embed/lzYrMcI92kw" },
+      { "video_id": "py04", "title": "Part 4: Strings", "video_url": "https://www.youtube.com/embed/fWNZAw5Bmco" },
+      { "video_id": "py05", "title": "Part 5: Type Casting", "video_url": "https://www.youtube.com/embed/OF2sr5e7PrY" },
+      { "video_id": "py06", "title": "Part 6: User Input", "video_url": "https://www.youtube.com/embed/PJ_5VNvJGtA" },
+      { "video_id": "py07", "title": "Part 7: Lists", "video_url": "https://www.youtube.com/embed/PJ_5VNvJGtA" },
+      { "video_id": "py08", "title": "Part 8: List Methods", "video_url": "https://www.youtube.com/embed/0fEJFRKJN4U" },
+      { "video_id": "py09", "title": "Part 9: Tuples", "video_url": "https://www.youtube.com/embed/h5abkZ_Ch6c" },
+      { "video_id": "py10", "title": "Part 10: Dictionaries", "video_url": "https://www.youtube.com/embed/Z4bm7xzYpKM" },
+      { "video_id": "py11", "title": "Part 11: Dictionary Methods", "video_url": "https://www.youtube.com/embed/hpsp-LQurco" },
+      { "video_id": "py12", "title": "Part 12: Sets", "video_url": "https://www.youtube.com/embed/AZBxs3OvFrY" },
+      { "video_id": "py13", "title": "Part 13: If, Elif, Else", "video_url": "https://www.youtube.com/embed/qT3_7FMuv-U" },
+      { "video_id": "py14", "title": "Part 14: For Loops", "video_url": "https://www.youtube.com/embed/lTgLOuaQsvk" },
+      { "video_id": "py15", "title": "Part 15: While Loops", "video_url": "https://www.youtube.com/embed/Bbyp4VRbmyY" },
+      { "video_id": "py16", "title": "Part 16: Functions", "video_url": "https://www.youtube.com/embed/2XxGplWqXVQ" },
+      { "video_id": "py17", "title": "Part 17: Return Statement", "video_url": "https://www.youtube.com/embed/tsMrUdynbQQ" },
+      { "video_id": "py18", "title": "Part 18: Args and Kwargs", "video_url": "https://www.youtube.com/embed/gLnCmUkgUQk" },
+      { "video_id": "py19", "title": "Part 19: Scope", "video_url": "https://www.youtube.com/embed/gLnCmUkgUQk" },
+      { "video_id": "py20", "title": "Part 20: F-Strings", "video_url": "https://www.youtube.com/embed/rgM7Z9BNm1s" },
+      { "video_id": "py21", "title": "Part 21: Slicing", "video_url": "https://www.youtube.com/embed/lvp4NfED6K4" },
+      { "video_id": "py22", "title": "Part 22: Exception Handling", "video_url": "https://www.youtube.com/embed/RJhoT5PEf_0" },
+      { "video_id": "py23", "title": "Part 23: File Handling", "video_url": "https://www.youtube.com/embed/loX34ct0hxs" },
+      { "video_id": "py24", "title": "Part 24: Modules", "video_url": "https://www.youtube.com/embed/R8Rw9mIa7JQ" },
+      { "video_id": "py25", "title": "Part 25: PIP", "video_url": "https://www.youtube.com/embed/Jov7G7IpuLo" },
+      { "video_id": "py26", "title": "Part 26: Project Example", "video_url": "https://www.youtube.com/embed/4H0GXzQ41t0" }
     ]
   },
   {
@@ -28,16 +39,24 @@
     "description": "Build powerful web applications with the Django framework.",
     "image_url": "https://placehold.co/600x400/228B22/FFFFFF?text=Django",
     "videos": [
-      {
-        "video_id": "dj01",
-        "title": "Project Setup",
-        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-      },
-      {
-        "video_id": "dj02",
-        "title": "Models and Databases",
-        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
-      }
+      { "video_id": "dj01", "title": "Lecture 1: Introduction", "video_url": "https://www.youtube.com/embed/Jz-8-8Q_M8s" },
+      { "video_id": "dj02", "title": "Lecture 2: HTTP", "video_url": "https://www.youtube.com/embed/k6Erh7oHv4c" },
+      { "video_id": "dj03", "title": "Lecture 3: Django", "video_url": "https://www.youtube.com/embed/3-n9tGYB32I" },
+      { "video_id": "dj04", "title": "Lecture 4: Python", "video_url": "https://www.youtube.com/embed/N5f_z5apB4o" },
+      { "video_id": "dj05", "title": "Lecture 5: Git", "video_url": "https://www.youtube.com/embed/e_kKsa-W-8A" },
+      { "video_id": "dj06", "title": "Lecture 6: HTML", "video_url": "https://www.youtube.com/embed/GA3A-g78h-E" },
+      { "video_id": "dj07", "title": "Lecture 7: CSS", "video_url": "https://www.youtube.com/embed/u4k5-xxA6-k" },
+      { "video_id": "dj08", "title": "Lecture 8: JavaScript", "video_url": "https://www.youtube.com/embed/l2rz-N-dI-s" },
+      { "video_id": "dj09", "title": "Problem Set 0", "video_url": "https://www.youtube.com/embed/8v-_Hn6o0-A" },
+      { "video_id": "dj10", "title": "Problem Set 1", "video_url": "https://www.youtube.com/embed/9NP62Xg6gOY" },
+      { "video_id": "dj11", "title": "Problem Set 2", "video_url": "https://www.youtube.com/embed/o0H3bA8lJ8A" },
+      { "video_id": "dj12", "title": "Problem Set 3", "video_url": "https://www.youtube.com/embed/XW70jelw2P0" },
+      { "video_id": "dj13", "title": "Problem Set 4", "video_url": "https://www.youtube.com/embed/p8-pP_nFTm4" },
+      { "video_id": "dj14", "title": "Problem Set 5", "video_url": "https://www.youtube.com/embed/x-0s6Hkv-r0" },
+      { "video_id": "dj15", "title": "Problem Set 6", "video_url": "https://www.youtube.com/embed/YIcb9_vLzJg" },
+      { "video_id": "dj16", "title": "Problem Set 7", "video_url": "https://www.youtube.com/embed/t0o-t2-2p7U" },
+      { "video_id": "dj17", "title": "Problem Set 8", "video_url": "https://www.youtube.com/embed/2-p-I402-90" },
+      { "video_id": "dj18", "title": "Final Project", "video_url": "https://www.youtube.com/embed/5BDVn4Ch-04" }
     ]
   }
 ]

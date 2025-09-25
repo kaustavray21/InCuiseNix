@@ -1,5 +1,5 @@
 # core/forms.py
-
+from .models import Note
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django import forms
@@ -22,3 +22,13 @@ class LoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+
+class NoteForm(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ['content', 'video_timestamp']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'video_timestamp': forms.HiddenInput(),
+        }

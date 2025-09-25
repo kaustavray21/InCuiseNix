@@ -36,26 +36,31 @@
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-2 text-dark text-uppercase">
                     <span>My Courses</span>
                 </h6>
-                <ul class="nav flex-column">
+                <ul class="nav flex-column mb-2">
                     {% if enrolled_courses %}
                         {% for course in enrolled_courses %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{% url 'video_player' course.id %}">
                                 {{ course.title }}
                             </a>
                         </li>
                         {% endfor %}
                     {% else %}
-                        <li class="nav-item px-3 text-center">
-                            <p class="text-muted small mt-3">You are not enrolled in any courses yet.</p>
-                            <div class="d-grid">
-                                <a href="#" class="btn btn-primary btn-sm">Enroll in a Course</a>
-                            </div>
+                        <li class="nav-item px-3">
+                            <p class="text-muted small">You are not enrolled in any courses yet.</p>
                         </li>
                     {% endif %}
                 </ul>
+
                 <hr class="text-muted">
-                <div id="course-options" class="px-3">
+
+                <div class="px-3">
+                    <div class="d-grid">
+                        <a href="{% url 'courses_list' %}" class="btn btn-primary">Enroll in New Course</a>
+                    </div>
+                </div>
+
+                <div id="course-options" class="px-3 mt-4">
                     </div>
             </div>
         </nav>
