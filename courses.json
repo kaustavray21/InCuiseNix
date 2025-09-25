@@ -1,0 +1,43 @@
+[
+  {
+    "course_id": "py-basics",
+    "title": "Python for Beginners",
+    "description": "A comprehensive introduction to the Python programming language.",
+    "image_url": "https://placehold.co/600x400/000000/FFFFFF?text=Python",
+    "videos": [
+      {
+        "video_id": "py01",
+        "title": "Introduction to Python",
+        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+      },
+      {
+        "video_id": "py02",
+        "title": "Variables and Data Types",
+        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+      },
+      {
+        "video_id": "py03",
+        "title": "Control Flow (If-Else)",
+        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+      }
+    ]
+  },
+  {
+    "course_id": "django-web",
+    "title": "Django Web Development",
+    "description": "Build powerful web applications with the Django framework.",
+    "image_url": "https://placehold.co/600x400/228B22/FFFFFF?text=Django",
+    "videos": [
+      {
+        "video_id": "dj01",
+        "title": "Project Setup",
+        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+      },
+      {
+        "video_id": "dj02",
+        "title": "Models and Databases",
+        "video_url": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+      }
+    ]
+  }
+]

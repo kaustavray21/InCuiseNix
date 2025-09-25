@@ -1,4 +1,5 @@
 # core/views.py
+from .models import Enrollment
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
@@ -39,4 +40,8 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
-    return render(request, 'core/dashboard.html')
+    enrolled_courses = Enrollment.objects.filter(user=request.user).select_related('course')
+    context = {
+        'enrolled_courses': [enrollment.course for enrollment in enrolled_courses]
+    }
+    return render(request, 'core/dashboard.html', context)
