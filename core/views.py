@@ -1,9 +1,13 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from .forms import SignUpForm, LoginForm, NoteForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import Enrollment, Course, Video, Note
+
+# ... the rest of your view functions
 
 def home(request):
     return render(request, 'core/home.html')
@@ -99,3 +103,5 @@ def video_player_view(request, course_id):
         'form': form,
     }
     return render(request, 'core/video_player.html', context)
+
+

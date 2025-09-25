@@ -5,3 +5,4 @@ admin.site.register(Course)
 admin.site.register(Video)
 admin.site.register(Enrollment)
 admin.site.register(Note)
+

@@ -1,21 +1,16 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+{% endblock %}
 
 {% block content %}
-<style>
-    .note-card-link {
-        text-decoration: none;
-        color: inherit;
-        cursor: pointer;
-    }
-    .note-card-link .card:hover {
-        background-color: #f8f9fa;
-        border-color: #dee2e6;
-    }
-</style>
+<div class="container-fluid mt-4" id="player-data-container" 
+    data-video-id="{{ current_video.id }}"
+    data-csrf-token="{{ csrf_token }}">
 
-<div class="container-fluid mt-4">
     <div class="row">
-        
         <div class="col-lg-3">
             <h4 class="mb-3">Course Playlist</h4>
             <div class="list-group" style="max-height: 80vh; overflow-y: auto;">
@@ -27,24 +22,43 @@
                 {% endfor %}
             </div>
         </div>
-
+        
         <div class="col-lg-9">
             <h2 class="mb-3">{{ course.title }}</h2>
-            <div class="ratio ratio-16x9 mb-3">
-                <div id="youtube-player"></div>
+            <div class="mb-3">
+                <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ current_video.video_url|slice:"-11:" }}"></div>
             </div>
             <h4 class="mb-3">{{ current_video.title }}</h4>
-            
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal">
-              Add Note
-            </button>
-            <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#notesOffcanvas" aria-controls="notesOffcanvas">
-              View Notes
-            </button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal">Add Note</button>
+            <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#notesOffcanvas">View Notes</button>
             <hr>
-            <p class="text-muted">Use the buttons above to manage your notes for this video.</p>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addNoteModalLabel">Add a Note</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+            {{ form.video_timestamp }}
+            <div class="mb-3">
+                <label for="{{ form.content.id_for_label }}" class="form-label">Note Content</label>
+                {{ form.content }}
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save Note</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="notesOffcanvas" aria-labelledby="notesOffcanvasLabel">
@@ -90,67 +104,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addNoteModalLabel">Add a Note</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form method="post">
-        {% csrf_token %}
-        <div class="modal-body">
-            {{ form.video_timestamp }}
-            <div class="mb-3">
-                <label for="{{ form.content.id_for_label }}" class="form-label">Note Content</label>
-                {{ form.content }}
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save Note</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<script src="https://www.youtube.com/iframe_api"></script>
-<script>
-    let player;
-    const initialVideoId = '{{ current_video.video_url|slice:"-11:" }}';
-
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtube-player', {
-            height: '100%',
-            width: '100%',
-            videoId: initialVideoId,
-        });
-    }
-
-    const addNoteModal = document.getElementById('addNoteModal');
-    addNoteModal.addEventListener('show.bs.modal', function (event) {
-        if (player && typeof player.pauseVideo === 'function') {
-            player.pauseVideo();
-        }
-        if (player && typeof player.getCurrentTime === 'function') {
-            const currentTime = Math.round(player.getCurrentTime());
-            const timestampInput = document.getElementById('{{ form.video_timestamp.id_for_label }}');
-            timestampInput.value = currentTime;
-        }
-    });
-
-    const viewNoteModal = document.getElementById('viewNoteModal');
-    viewNoteModal.addEventListener('show.bs.modal', function (event) {
-        const triggerElement = event.relatedTarget;
-        const noteContent = triggerElement.getAttribute('data-bs-note-content');
-        const noteMeta = triggerElement.getAttribute('data-bs-note-meta');
-        
-        const modalBody = viewNoteModal.querySelector('.modal-body p');
-        const modalMeta = viewNoteModal.querySelector('#viewNoteModalMeta');
-        
-        modalBody.textContent = noteContent;
-        modalMeta.textContent = noteMeta;
-    });
-</script>
+<script src="{% static 'js/notes.js' %}" defer></script>
 {% endblock %}
+
+{% block footer %}
+{% endblock footer %}

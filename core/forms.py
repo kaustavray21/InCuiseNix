@@ -24,6 +24,8 @@ class LoginForm(AuthenticationForm):
             field.widget.attrs['class'] = 'form-control'
 
 
+# core/forms.py
+
 class NoteForm(forms.ModelForm):
     class Meta:
         model = Note

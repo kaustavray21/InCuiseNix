@@ -42,3 +42,5 @@ class Note(models.Model):
 
     def __str__(self):
         return f"Note by {self.user.username} for {self.video.title} at {self.video_timestamp}s"
+    
+

@@ -20,11 +20,11 @@
   .sidebar .nav-link {
     font-weight: 500;
     color: #343a40;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
     border-radius: .25rem;
     margin: 0.2rem 0;
   }
-  .sidebar .nav-link:hover {
+  .sidebar .nav-link:hover, .sidebar .nav-link.active {
     background-color: #e9ecef;
   }
 </style>
@@ -36,11 +36,11 @@
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-2 text-dark text-uppercase">
                     <span>My Courses</span>
                 </h6>
-                <ul class="nav flex-column mb-2">
+                <ul id="course-list" class="nav flex-column mb-2">
                     {% if enrolled_courses %}
                         {% for course in enrolled_courses %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'video_player' course.id %}">
+                            <a class="nav-link course-link" href="#" data-course-url="{% url 'video_player' course.id %}" data-course-title="{{ course.title }}">
                                 {{ course.title }}
                             </a>
                         </li>
@@ -60,19 +60,26 @@
                     </div>
                 </div>
 
-                <div id="course-options" class="px-3 mt-4">
+                <div id="course-options" class="px-1 mt-4" style="display: none;">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title" id="selected-course-title">Course Title</h6>
+                            <div class="d-grid gap-2">
+                                <a href="#" id="resume-course-btn" class="btn btn-success btn-sm">Start / Resume Course</a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm">View Progress</a>
+                            </div>
+                        </div>
                     </div>
+                </div>
             </div>
         </nav>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="padding-top: 2rem;">
-            
             <div class="card shadow-sm border-0 mb-4 d-inline-block">
                 <div class="card-body p-3">
                     <h1 class="h2 mb-0">Dashboard</h1>
                 </div>
             </div>
-
             <div class="row justify-content-center align-items-center" style="min-height: 60vh;">
                 <div class="col-lg-8">
                     <div class="card shadow border-0 text-center">
@@ -86,4 +93,32 @@
         </main>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const courseLinks = document.querySelectorAll('.course-link');
+    const courseOptionsPanel = document.getElementById('course-options');
+    const selectedCourseTitle = document.getElementById('selected-course-title');
+    const resumeCourseBtn = document.getElementById('resume-course-btn');
+
+    courseLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            // Highlight the selected course
+            courseLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+
+            // Get course data from the clicked link
+            const courseUrl = this.getAttribute('data-course-url');
+            const courseTitle = this.getAttribute('data-course-title');
+
+            // Update and show the options panel
+            selectedCourseTitle.textContent = courseTitle;
+            resumeCourseBtn.setAttribute('href', courseUrl);
+            courseOptionsPanel.style.display = 'block';
+        });
+    });
+});
+</script>
 {% endblock %}
