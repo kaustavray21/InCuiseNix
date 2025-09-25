@@ -1,33 +1,106 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-  <div class="p-5 mb-4 bg-light rounded-3 text-center">
-    <div class="container-fluid py-5">
-      <h1 class="display-5 fw-bold">Welcome to InCuiseNix</h1>
-      <p class="fs-4">Your journey to knowledge starts here. Enroll in courses and expand your skills.</p>
+
+<style>
+  .status-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+  }
+  .status-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+</style>
+
+<div class="p-5 mb-4 rounded-3" style="background-color: #CDAEE4;">
+  <div class="container-fluid py-5 text-center">
+    <h1 class="display-3 fw-bold text-dark">Unlock Your Potential</h1>
+    <p class="fs-4 col-md-8 mx-auto text-dark">Join a community of learners and take your skills to the next level with our expert-led courses.</p>
+    {% if user.is_authenticated %}
+      <a href="{% url 'dashboard' %}" class="btn btn-lg mt-3 text-light" style = "background-color: #663F83;">Go to Dashboard</a>
+    {% else %}
+      <a href="{% url 'signup' %}" class="btn btn-lg mt-3 text-light" style = "background-color: #663F83;">Get Started Now</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="container my-5" id="status">
+  <h2 class="text-center mb-5 display-6">Our Status</h2>
+  <div class="row text-center g-4">
+    <div class="col-lg-4">
+      <div class="card status-card shadow-sm h-100 p-4">
+        <div class="card-body">
+          <h3 class="card-title display-4 fw-bold">10+</h3>
+          <p class="card-text fs-5 text-muted">Expert-Led Courses</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card status-card shadow-sm h-100 p-4">
+        <div class="card-body">
+          <h3 class="card-title display-4 fw-bold">500+</h3>
+          <p class="card-text fs-5 text-muted">Happy Students</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card status-card shadow-sm h-100 p-4">
+        <div class="card-body">
+          <h3 class="card-title display-4 fw-bold">1000+</h3>
+          <p class="card-text fs-5 text-muted">Hours of Content</p>
+        </div>
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="row text-center mb-5">
-    <h2>Our Status</h2>
-    <div class="col-md-4">
-      <h3>10+ Courses</h3>
-    </div>
-    <div class="col-md-4">
-      <h3>500+ Students</h3>
-    </div>
-    <div class="col-md-4">
-      <h3>1000+ Hours of Content</h3>
-    </div>
-  </div>
 
+<div class="container my-5" id="faq">
+  <h2 class="text-center mb-5 display-6">Frequently Asked Questions</h2>
   <div class="row">
-    <h2 class="text-center mb-4">Frequently Asked Questions</h2>
     <div class="col-md-8 mx-auto">
-      <p><strong>Q: How do I enroll in a course?</strong></p>
-      <p>A: Simply sign up for an account, browse our course catalog, and click the "enroll" button.</p>
-      <p><strong>Q: Are the courses self-paced?</strong></p>
-      <p>A: Yes, all our courses are designed to be self-paced so you can learn at your convenience.</p>
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              How do I enroll in a course?
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Simply sign up for a free account, browse our course catalog from your dashboard, and click the "enroll" button on any course you're interested in. It's that simple!
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Are the courses self-paced?
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Yes, absolutely. All our courses are designed to be self-paced so you can learn at your convenience, whenever and wherever you want. You can start, pause, and resume your lessons at any time.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              Can I access courses on mobile devices?
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Yes, our platform is fully responsive, meaning you can access your courses and watch videos on any device, including desktops, tablets, and smartphones.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+
 {% endblock %}
