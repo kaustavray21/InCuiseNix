@@ -1,33 +1,36 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+{# Link to the new homepage-specific stylesheet #}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<style>
-  .status-card {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    border: none;
-    cursor: pointer;
-  }
-  .status-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  }
-</style>
-
-<div class="p-5 mb-4 rounded-3" style="background-color: #CDAEE4;">
-  <div class="container-fluid py-5 text-center">
-    <h1 class="display-3 fw-bold text-dark">Unlock Your Potential</h1>
-    <p class="fs-4 col-md-8 mx-auto text-dark">Join a community of learners and take your skills to the next level with our expert-led courses.</p>
-    {% if user.is_authenticated %}
-      <a href="{% url 'dashboard' %}" class="btn btn-lg mt-3 text-light" style = "background-color: #663F83;">Go to Dashboard</a>
-    {% else %}
-      <a href="{% url 'signup' %}" class="btn btn-lg mt-3 text-light" style = "background-color: #663F83;">Get Started Now</a>
-    {% endif %}
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 hero-text-container">
+        <h1 class="display-3 fw-bold text-dark">Unlock Your Potential</h1>
+        <p class="fs-4 col-md-10 text-muted mt-3">Join a community of learners and take your skills to the next level with our expert-led courses.</p>
+        {% if user.is_authenticated %}
+          <a href="{% url 'dashboard' %}" class="btn btn-lg mt-4 text-light" style="background-color: #663F83;">Go to Dashboard</a>
+        {% else %}
+          <a href="{% url 'signup' %}" class="btn btn-lg mt-4 text-light" style="background-color: #663F83;">Get Started Now</a>
+        {% endif %}
+      </div>
+      <div class="col-lg-6 mt-5 mt-lg-0 hero-image-container">
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop" 
+             alt="Developer coding on a laptop" 
+             class="img-fluid hero-image">
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
-<div class="container my-5" id="status">
-  <h2 class="text-center mb-5 display-6">Our Status</h2>
+<div class="container my-5 py-5 fade-in-section" id="status">
+  <h2 class="text-center section-title">Why Choose InCuiseNix?</h2>
   <div class="row text-center g-4">
     <div class="col-lg-4">
       <div class="card status-card shadow-sm h-100 p-4">
@@ -56,9 +59,100 @@
   </div>
 </div>
 
+<section class="py-5 fade-in-section" style="background-color: #f8f9fa;">
+  <div class="container">
+    <h2 class="text-center section-title">Explore Our Popular Courses</h2>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="card course-card shadow-sm">
+          <img src="https://placehold.co/600x400/000000/FFFFFF?text=Python" class="card-img-top" alt="Python Course">
+          <div class="card-body p-4">
+            <h5 class="card-title fw-bold">Python for Beginners</h5>
+            <p class="card-text text-muted">A comprehensive introduction to the Python programming language.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card course-card shadow-sm">
+          <img src="https://placehold.co/600x400/228B22/FFFFFF?text=Django" class="card-img-top" alt="Django Course">
+          <div class="card-body p-4">
+            <h5 class="card-title fw-bold">Django Web Development</h5>
+            <p class="card-text text-muted">Build powerful web applications with the Django framework.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card course-card shadow-sm">
+          <img src="https://placehold.co/600x400/6f42c1/FFFFFF?text=React" class="card-img-top" alt="React Course">
+          <div class="card-body p-4">
+            <h5 class="card-title fw-bold">Modern Frontend with React</h5>
+            <p class="card-text text-muted">Create interactive user interfaces with the React.js library.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<div class="container my-5" id="faq">
-  <h2 class="text-center mb-5 display-6">Frequently Asked Questions</h2>
+<section class="testimonials-section fade-in-section">
+  <div class="container">
+    <h2 class="text-center section-title">What Our Students Say</h2>
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+              <div class="testimonial-card">
+                <img src="https://placehold.co/100x100/EFEFEF/333333?text=User1" alt="User review" class="testimonial-img">
+                <p class="fs-5 fst-italic">"The Python course was fantastic! The instructor explained complex topics in a simple way. I feel much more confident in my coding skills now."</p>
+                <div class="mt-4">
+                  <h5 class="testimonial-name">Sarah L.</h5>
+                  <p class="testimonial-role">Web Developer</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+              <div class="testimonial-card">
+                <img src="https://placehold.co/100x100/E0E0E0/333333?text=User2" alt="User review" class="testimonial-img">
+                <p class="fs-5 fst-italic">"I enrolled in the Django course to build a project for my portfolio, and it exceeded my expectations. Highly recommended for anyone serious about web development."</p>
+                <div class="mt-4">
+                  <h5 class="testimonial-name">David C.</h5>
+                  <p class="testimonial-role">CS Student</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+              <div class="testimonial-card">
+                <img src="https://placehold.co/100x100/D5D5D5/333333?text=User3" alt="User review" class="testimonial-img">
+                <p class="fs-5 fst-italic">"As a complete beginner, I found the platform very easy to navigate. The self-paced learning model is perfect for my busy schedule."</p>
+                <div class="mt-4">
+                  <h5 class="testimonial-name">Maria G.</h5>
+                  <p class="testimonial-role">Career Changer</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-indicators position-static mt-4">
+        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container my-5 py-5 fade-in-section" id="faq">
+  <h2 class="text-center section-title">Frequently Asked Questions</h2>
   <div class="row">
     <div class="col-md-8 mx-auto">
       <div class="accordion" id="faqAccordion">
@@ -102,5 +196,20 @@
     </div>
   </div>
 </div>
+
+<section class="social-follow-section text-center fade-in-section">
+    <div class="container">
+        <h3 class="fw-bold mb-4">Follow Us On Social Media</h3>
+        <div class="d-flex justify-content-center gap-4">
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+</section>
+
+{# Link to the new JavaScript file at the end of the content block #}
+<script src="{% static 'js/animations.js' %}" defer></script>
 
 {% endblock %}
