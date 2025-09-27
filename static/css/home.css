@@ -1,6 +1,6 @@
 /* --- Global Style Enhancements --- */
 body {
-  font-family: 'Inter', sans-serif; /* A cleaner, more modern font */
+  font-family: 'Inter', sans-serif;
 }
 
 .section-title {
@@ -85,6 +85,37 @@ body {
   object-fit: cover;
 }
 
+/* BUGFIX: Forcefully remove underline from the link wrapper */
+.course-card-link, .course-card-link:hover {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+/* Style for the title itself */
+.course-card-link .card-title {
+  color: #212529; 
+  transition: color 0.2s ease-in-out;
+}
+
+/* Adds a nice hover effect to the title */
+.course-card-link:hover .card-title {
+  color: #663F83; 
+}
+
+
+.course-rating {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #ffc107;
+}
+
+.course-rating .rating-text {
+  color: #6c757d;
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+}
+
+
 /* --- Testimonials Section --- */
 .testimonials-section {
   background-color: #f1f3f5;
@@ -117,6 +148,11 @@ body {
 
 .carousel-indicators [data-bs-target] {
   background-color: #663F83;
+}
+
+/* Styles for FAQ Hover Effect */
+.accordion-button {
+  cursor: default;
 }
 
 /* --- Social Follow Section --- */
