@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'incuisenix.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'incuisenix_db',
+        'NAME': 'test_db',
         'USER': 'root',
-        'PASSWORD': '7455tyu@AVDC',
+        'PASSWORD': 'Helloayushi@29',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }
