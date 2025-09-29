@@ -1,11 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // --- 1. SETUP & INITIALIZATION ---
     const playerContainer = document.getElementById('player-data-container');
     if (!playerContainer) return;
-
     const csrfToken = playerContainer.dataset.csrfToken;
 
-    // --- 2. TIMESTAMP FORMATTING ---
     function formatTimestamp(totalSeconds) {
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
@@ -23,15 +20,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     formatAllTimestamps();
 
-    // --- 3. "ADD NOTE" FUNCTIONALITY ---
     const addNoteModalEl = document.getElementById('addNoteModal');
-    const addNoteModal = bootstrap.Modal.getInstance(addNoteModalEl) || new bootstrap.Modal(addNoteModalEl);
+    const addNoteModal = new bootstrap.Modal(addNoteModalEl);
     const addNoteForm = document.getElementById('addNoteForm');
+    const editNoteModalEl = document.getElementById('editNoteModal');
+    const editNoteModal = new bootstrap.Modal(editNoteModalEl);
+    const editNoteForm = document.getElementById('editNoteForm');
+    const editNoteContent = document.getElementById('editNoteContent');
     const notesList = document.getElementById('notes-list-container');
     const noNotesMessage = document.getElementById('no-notes-message');
-    
-    addNoteModalEl.addEventListener('show.bs.modal', function () {
-        // Access the globally available player to pause it
+
+    addNoteModalEl.addEventListener('show.bs.modal', function() {
         if (window.videoPlayer) {
             window.videoPlayer.pause();
             const currentTime = Math.round(window.videoPlayer.currentTime);
@@ -48,149 +47,160 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(this);
 
         fetch(`/note/add/${videoId}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken
-            },
-            body: formData,
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw err; });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                if (noNotesMessage) noNotesMessage.style.display = 'none';
-                
-                const newNoteCardHTML = createNoteCard(data.note);
-                notesList.insertAdjacentHTML('afterbegin', newNoteCardHTML);
-                
-                formatAllTimestamps();
-                addNoteForm.reset();
-                addNoteModal.hide();
-                
-                // Access the globally available player to resume it
-                if (window.videoPlayer) {
-                    window.videoPlayer.play();
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
                 }
-            }
-        })
-        .catch(error => {
-            console.error('Error adding note:', error);
-            let errorMessage = 'Could not save the note. Please try again.';
-            if (error && error.errors) {
-                errorMessage += '\n\nDetails:\n';
-                for (const field in error.errors) {
-                    errorMessage += `- ${error.errors[field][0]}\n`;
-                }
-            }
-            alert(errorMessage);
-        });
-    });
-    
-    // --- 4. "VIEW, EDIT, DELETE NOTE" FUNCTIONALITY ---
-    const editNoteModalEl = document.getElementById('editNoteModal');
-    const editNoteModal = bootstrap.Modal.getInstance(editNoteModalEl) || new bootstrap.Modal(editNoteModalEl);
-    const editNoteForm = document.getElementById('editNoteForm');
-    const editNoteContent = document.getElementById('editNoteContent');
-    const viewNoteModal = document.getElementById('viewNoteModal');
-    
-    if (viewNoteModal) {
-        viewNoteModal.addEventListener('show.bs.modal', function(event) {
-            const triggerLink = event.relatedTarget.closest('.note-card-link');
-            if (triggerLink) {
-                const noteContent = triggerLink.getAttribute('data-bs-note-content');
-                const noteMeta = triggerLink.getAttribute('data-bs-note-meta');
-                viewNoteModal.querySelector('.modal-body p').textContent = noteContent;
-                viewNoteModal.querySelector('#viewNoteModalMeta').innerHTML = noteMeta;
-            }
-        });
-    }
-    
-    document.body.addEventListener('click', function(event) {
-        const target = event.target;
-        
-        if (target.matches('.btn-edit-note, .btn-edit-note i')) {
-            const button = target.closest('.btn-edit-note');
-            editNoteContent.value = button.dataset.noteContent;
-            editNoteForm.dataset.noteId = button.dataset.noteId;
-            editNoteModal.show();
-        }
-        
-        if (target.matches('.btn-delete-note, .btn-delete-note i')) {
-            const button = target.closest('.btn-delete-note');
-            const noteId = button.dataset.noteId;
-            
-            if (confirm('Are you sure you want to delete this note?')) {
-                fetch(`/note/delete/${noteId}/`, {
-                    method: 'POST',
-                    headers: { 'X-CSRFToken': csrfToken }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        document.querySelector(`.note-card[data-note-id='${noteId}']`).remove();
-                    } else {
-                        alert('Error deleting note.');
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    if (noNotesMessage) noNotesMessage.style.display = 'none';
+
+                    const newNoteCardHTML = createNoteCard(data.note);
+                    notesList.insertAdjacentHTML('afterbegin', newNoteCardHTML);
+
+                    formatAllTimestamps();
+                    addNoteForm.reset();
+                    addNoteModal.hide();
+
+                    if (window.videoPlayer) {
+                        window.videoPlayer.play();
                     }
-                });
-            }
-        }
+                }
+            })
+            .catch(error => {
+                console.error('Error adding note:', error);
+            });
     });
-    
+
     editNoteForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const noteId = this.dataset.noteId;
         const newContent = editNoteContent.value;
-        
-        fetch(`/note/edit/${noteId}/`, {
-            method: 'POST',
-            headers: { 'X-CSRFToken': csrfToken, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content: newContent })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                const noteCardText = document.querySelector(`.note-card[data-note-id='${noteId}'] .card-text`);
-                const editButton = document.querySelector(`.btn-edit-note[data-note-id='${noteId}']`);
-                const viewLink = document.querySelector(`.note-card[data-note-id='${noteId}'] .note-card-link`);
 
-                if (noteCardText) noteCardText.textContent = newContent;
-                if (editButton) editButton.dataset.noteContent = newContent;
-                if (viewLink) viewLink.dataset.bsNoteContent = newContent;
-                
-                editNoteModal.hide();
-            } else {
-                alert('Error updating note.');
-            }
-        });
+        fetch(`/note/edit/${noteId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: newContent
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const noteCard = document.querySelector(`.note-card[data-note-id='${noteId}']`);
+                    if (noteCard) {
+                        noteCard.querySelector('.card-text').textContent = newContent;
+                        noteCard.dataset.fullContent = newContent; 
+                    }
+                    
+                    const editButton = document.querySelector(`.btn-edit-note[data-note-id='${noteId}']`);
+                    if (editButton) editButton.dataset.noteContent = newContent;
+
+                    editNoteModal.hide();
+                } else {
+                    alert('Error updating note.');
+                }
+            });
     });
 
-    // --- 5. HELPER FUNCTION ---
+    const notePopupOverlay = document.getElementById('note-popup-overlay');
+    const popupNoteContent = document.getElementById('popup-note-content');
+    const popupNoteMeta = document.getElementById('popup-note-meta');
+    const popupCloseBtn = document.getElementById('popup-close-btn');
+
+    notesList.addEventListener('click', function(event) {
+        const target = event.target;
+        const noteCard = target.closest('.note-card');
+
+        if (target.closest('.btn-edit-note')) {
+            const button = target.closest('.btn-edit-note');
+            editNoteContent.value = button.dataset.noteContent;
+            editNoteForm.dataset.noteId = button.dataset.noteId;
+            editNoteModal.show();
+            return;
+        }
+
+        if (target.closest('.btn-delete-note')) {
+            const button = target.closest('.btn-delete-note');
+            const noteId = button.dataset.noteId;
+
+            if (confirm('Are you sure you want to delete this note?')) {
+                fetch(`/note/delete/${noteId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            document.querySelector(`.note-card[data-note-id='${noteId}']`).remove();
+                        } else {
+                            alert('Error deleting note.');
+                        }
+                    });
+            }
+            return;
+        }
+
+        if (noteCard) {
+            const noteContent = noteCard.dataset.fullContent;
+            const noteMeta = noteCard.dataset.metaInfo;
+
+            popupNoteContent.textContent = noteContent;
+            popupNoteMeta.innerHTML = noteMeta;
+            notePopupOverlay.style.display = 'flex';
+        }
+    });
+
+    function closePopup() {
+        notePopupOverlay.style.display = 'none';
+    }
+
+    popupCloseBtn.addEventListener('click', closePopup);
+    notePopupOverlay.addEventListener('click', function(event) {
+        if (event.target === notePopupOverlay) {
+            closePopup();
+        }
+    });
+
     function createNoteCard(note) {
         const safeContent = note.content.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
         return `
-            <div class="card mb-2 note-card" data-note-id="${note.id}">
-                <div class="card-body position-relative">
-                    <a href="#" class="text-decoration-none text-dark note-card-link" data-bs-toggle="modal" data-bs-target="#viewNoteModal" 
-                       data-bs-note-content="${safeContent}" 
-                       data-bs-note-meta="Timestamp: ${note.timestamp}s &mdash; Added on: ${note.created_at}">
+            <div class="card mb-3 note-card" 
+                 data-note-id="${note.id}"
+                 data-full-content="${safeContent}"
+                 data-meta-info="Timestamp: ${note.timestamp}s &mdash; Added on: ${note.created_at}">
+                <div class="card-body">
+                    <div class="note-status-indicator"></div>
+                    <div class="note-text-wrapper">
                         <p class="card-text text-truncate">${safeContent}</p>
-                        <p class="card-subtitle text-muted small note-timestamp" data-seconds="${note.timestamp}">
+                        <p class="note-timestamp" data-seconds="${note.timestamp}">
                             Timestamp: ${note.timestamp}s
                         </p>
-                    </a>
+                    </div>
                     <div class="note-actions">
-                        <button class="btn btn-sm btn-outline-primary py-0 px-1 btn-edit-note"
+                        <button class="note-btn note-btn-edit btn-edit-note"
                                 data-note-id="${note.id}"
                                 data-note-content="${safeContent}">
-                            <i class="fas fa-pencil-alt"></i>
+                            Edit <i class="fas fa-pen-to-square ms-1"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger py-0 px-1 btn-delete-note"
+                        <button class="note-btn note-btn-delete btn-delete-note"
                                 data-note-id="${note.id}">
-                            <i class="fas fa-trash-alt"></i>
+                            <i class="fas fa-trash-can"></i>
                         </button>
                     </div>
                 </div>
@@ -198,3 +208,4 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 });
+

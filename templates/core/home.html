@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block extra_css %}
-{# Link to the homepage-specific stylesheet #}
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 
@@ -38,7 +37,6 @@
 <div class="container my-5 py-5 fade-in-section" id="status">
   <h2 class="text-center section-title">Why Choose InCuiseNix?</h2>
   <div class="row text-center g-4">
-    <!-- Status Cards -->
     <div class="col-lg-4">
       <div class="card status-card shadow-sm h-100 p-4">
         <div class="card-body">
@@ -73,7 +71,6 @@
   <div class="container">
     <h2 class="text-center section-title">Explore Our Popular Courses</h2>
     <div class="row g-4">
-      <!-- Course 1 -->
       <div class="col-md-6 col-lg-4">
         <a href="{% url 'courses_list' %}" class="course-card-link">
           <div class="card course-card shadow-sm h-100">
@@ -90,7 +87,6 @@
           </div>
         </a>
       </div>
-      <!-- Course 2 -->
       <div class="col-md-6 col-lg-4">
         <a href="{% url 'courses_list' %}" class="course-card-link">
           <div class="card course-card shadow-sm h-100">
@@ -107,7 +103,6 @@
           </div>
         </a>
       </div>
-      <!-- Course 3 -->
       <div class="col-md-6 col-lg-4">
         <a href="{% url 'courses_list' %}" class="course-card-link">
           <div class="card course-card shadow-sm h-100">
@@ -129,14 +124,13 @@
 </section>
 
 <!-- ============================================ -->
-<!-- Testimonials Carousel (UPDATED WITH ID) -->
+<!-- Testimonials Carousel -->
 <!-- ============================================ -->
 <section class="testimonials-section fade-in-section" id="reviews">
   <div class="container">
     <h2 class="text-center section-title">What Our Students Say</h2>
     <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-        <!-- Testimonial 1 -->
         <div class="carousel-item active">
           <div class="row justify-content-center">
             <div class="col-md-8 text-center">
@@ -151,7 +145,6 @@
             </div>
           </div>
         </div>
-        <!-- Testimonial 2 -->
         <div class="carousel-item">
           <div class="row justify-content-center">
             <div class="col-md-8 text-center">
@@ -166,7 +159,6 @@
             </div>
           </div>
         </div>
-        <!-- Testimonial 3 -->
         <div class="carousel-item">
           <div class="row justify-content-center">
             <div class="col-md-8 text-center">
@@ -199,7 +191,6 @@
   <div class="row">
     <div class="col-md-8 mx-auto">
       <div class="accordion" id="faqAccordion">
-        <!-- FAQ Item 1 -->
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button collapsed" type="button">
@@ -212,7 +203,6 @@
             </div>
           </div>
         </div>
-        <!-- FAQ Item 2 -->
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingTwo">
             <button class="accordion-button collapsed" type="button">
@@ -225,7 +215,6 @@
             </div>
           </div>
         </div>
-        <!-- FAQ Item 3 -->
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingThree">
             <button class="accordion-button collapsed" type="button">
@@ -261,8 +250,44 @@
 {% endblock %}
 
 {% block extra_js %}
-{# Link to the general animation script and the homepage-specific script #}
 <script src="{% static 'js/animations.js' %}" defer></script>
 <script src="{% static 'js/home.js' %}" defer></script>
 {% endblock %}
 
+{% block footer %}
+<footer class="main-footer mt-auto">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-md-12 mb-4 mb-lg-0">
+                <h3 class="footer-logo">InCuise<span class="nix">Nix</span></h3>
+                <p class="footer-tagline">Empowering the next generation of developers and creators through accessible, high-quality education.</p>
+                <div class="mt-4 footer-social-icons">
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-6 mb-4 mb-lg-0">
+                <h5 class="footer-heading">Navigate</h5>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="{% url 'home' %}#faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-6 col-6">
+                <h5 class="footer-heading">Contact Us</h5>
+                <ul class="footer-links">
+                    <li><i class="fas fa-envelope me-2"></i> help@incuisenix.com</li>
+                    <li><i class="fas fa-phone me-2"></i> (123) 456-7890</li>
+                    <li><i class="fas fa-map-marker-alt me-2"></i> 123 Tech Road, Silicon Valley</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p class="mb-0">&copy; 2025 InCuiseNix. All rights reserved.</p>
+    </div>
+</footer>
+{% endblock footer %}

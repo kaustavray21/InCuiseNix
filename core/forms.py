@@ -1,30 +1,28 @@
-# core/forms.py
-from .models import Note
+from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django import forms
+from .models import Note
 
-class SignUpForm(UserCreationForm):
+# 1. Create a Base Form or Mixin for styling
+class FormStylingMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+# 2. Update your forms to use the Mixin
+class SignUpForm(FormStylingMixin, UserCreationForm):
     email = forms.EmailField(max_length=254, required=True, help_text='Required. Please enter a valid email address.')
 
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email')
+    
+    # The __init__ method is no longer needed here
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-            field.widget.attrs['placeholder'] = field.label
-
-class LoginForm(AuthenticationForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-
-
-# core/forms.py
+class LoginForm(FormStylingMixin, AuthenticationForm):
+    # The __init__ method is no longer needed here
+    pass
 
 class NoteForm(forms.ModelForm):
     class Meta:
