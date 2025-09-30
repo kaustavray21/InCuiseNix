@@ -108,3 +108,61 @@ html {
     text-align: center;
     font-size: 0.9rem;
 }
+
+/* --- Final Custom Sign Up Button --- */
+.btn-signup-final {
+  display: inline-block;
+  width: 120px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #03045e;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease-in;
+  z-index: 1;
+  /* Added for centering text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.btn-signup-final::before,
+.btn-signup-final::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 15px;
+  height: 100%;
+  transform: skew(15deg);
+  transition: all 0.5s;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.btn-signup-final::before {
+  left: -20px;
+  background: #240046;
+}
+
+.btn-signup-final::after {
+  right: -20px;
+  background: #5a189a;
+}
+
+.btn-signup-final:hover::before,
+.btn-signup-final:hover::after {
+  width: 68%;
+}
+
+.btn-signup-final:hover span {
+  color: #e0aaff;
+  transition: 0.3s;
+}
+
+.btn-signup-final span {
+  color: #03045e;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease-in;
+}

@@ -1,35 +1,16 @@
 {% extends 'core/auth_base.html' %}
 
 {% block auth_title %}Create an Account{% endblock %}
-{% block auth_subtitle %}Join InCuiseNix to start your learning journey.{% endblock %}
 
 {% block form_content %}
-    {% if form.non_field_errors %}
-        <div class="alert alert-danger" role="alert">
-            {% for error in form.non_field_errors %}
-                {{ error }}
-            {% endfor %}
-        </div>
-    {% endif %}
-
-    {% for field in form %}
-        <div class="mb-3">
-            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-            {{ field }}
-            {% if field.help_text %}
-                <div class="form-text">{{ field.help_text|safe }}</div>
-            {% endif %}
-            {% for error in field.errors %}
-                <div class="invalid-feedback d-block">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endfor %}
+  {% for field in form %}
+    {{ field.errors }}
+    <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" class="input" placeholder="{{ field.label }}" id="{{ field.id_for_label }}">
+  {% endfor %}
 {% endblock %}
 
 {% block button_text %}Sign Up{% endblock %}
 
-{% block auth_footer_link %}
-    Already have an account? <a href="{% url 'login' %}" class="text-primary fw-bold">Log in here</a>.
+{% block auth_footer %}
+  Already have an account?<a href="{% url 'login' %}" class="sign-up-link">Log in</a>
 {% endblock %}

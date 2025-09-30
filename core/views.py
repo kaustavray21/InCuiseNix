@@ -14,6 +14,10 @@ def home(request):
     """Renders the homepage."""
     return render(request, 'core/home.html')
 
+def about_view(request):
+    """Renders the about us page."""
+    return render(request, 'core/about.html')
+
 def signup_view(request):
     """Handles user registration."""
     if request.method == 'POST':
