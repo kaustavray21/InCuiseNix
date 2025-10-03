@@ -40,7 +40,7 @@
                     {% if enrolled_courses %}
                         {% for course in enrolled_courses %}
                         <li class="nav-item">
-                            <a class="nav-link course-link" href="#" data-course-url="{% url 'video_player' course.id %}" data-course-title="{{ course.title }}">
+                            <a class="nav-link course-link" href="#" data-course-id="{{ course.id }}">
                                 {{ course.title }}
                             </a>
                         </li>
@@ -59,18 +59,6 @@
                         <a href="{% url 'courses_list' %}" class="btn btn-primary">Enroll in New Course</a>
                     </div>
                 </div>
-
-                <div id="course-options" class="px-1 mt-4" style="display: none;">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title" id="selected-course-title">Course Title</h6>
-                            <div class="d-grid gap-2">
-                                <a href="#" id="resume-course-btn" class="btn btn-success btn-sm">Start / Resume Course</a>
-                                <a href="#" class="btn btn-outline-secondary btn-sm">View Progress</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </nav>
 
@@ -80,16 +68,20 @@
                     <h1 class="h2 mb-0">Dashboard</h1>
                 </div>
             </div>
-            <div class="row justify-content-center align-items-center" style="min-height: 60vh;">
+
+            <div id="welcome-message-container" class="row justify-content-center align-items-center" style="min-height: 60vh;">
                 <div class="col-lg-8">
                     <div class="card shadow border-0 text-center">
                         <div class="card-body p-5">
                             <h2 class="display-5 fw-bold">Welcome, {{ user.username }}!</h2>
-                            <p class="lead text-muted mt-3">Select a course from your sidebar to begin learning, or enroll in a new course to expand your skills.</p>
+                            <p class="lead text-muted mt-3">Select a course from your sidebar to view its roadmap.</p>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div id="roadmap-container" style="display: none;">
+                </div>
         </main>
     </div>
 </div>
@@ -97,26 +89,58 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const courseLinks = document.querySelectorAll('.course-link');
-    const courseOptionsPanel = document.getElementById('course-options');
-    const selectedCourseTitle = document.getElementById('selected-course-title');
-    const resumeCourseBtn = document.getElementById('resume-course-btn');
+    const welcomeContainer = document.getElementById('welcome-message-container');
+    const roadmapContainer = document.getElementById('roadmap-container');
+    
+    // The event listener for the title card has been removed.
 
     courseLinks.forEach(link => {
-        link.addEventListener('click', function(event) {
+        link.addEventListener('click', async function(event) {
             event.preventDefault();
 
-            // Highlight the selected course
             courseLinks.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
 
-            // Get course data from the clicked link
-            const courseUrl = this.getAttribute('data-course-url');
-            const courseTitle = this.getAttribute('data-course-title');
+            const courseId = this.getAttribute('data-course-id');
 
-            // Update and show the options panel
-            selectedCourseTitle.textContent = courseTitle;
-            resumeCourseBtn.setAttribute('href', courseUrl);
-            courseOptionsPanel.style.display = 'block';
+            welcomeContainer.style.display = 'none';
+            roadmapContainer.style.display = 'block';
+            roadmapContainer.innerHTML = `
+                <div class="d-flex justify-content-center p-5">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`/roadmap/${courseId}/`);
+                if (!response.ok) {
+                    throw new Error('Failed to load course data.');
+                }
+                const data = await response.json();
+                
+                const firstVideoUrl = `/course/${courseId}/`;
+                let roadmapHTML = `
+                    <div class="row justify-content-center align-items-center" style="min-height: 60vh;">
+                        <div class="col-lg-8">
+                            <div class="card shadow border-0 text-center">
+                                <div class="card-body p-5">
+                                    <h2 class="display-5 fw-bold">Roadmap to ${data.title}</h2>
+                                    <p class="lead text-muted mt-3">Your learning journey for this course is ready. Press the button below to begin.</p>
+                                    <a href="${firstVideoUrl}" class="btn btn-primary btn-lg mt-4">Start Learning</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                roadmapContainer.innerHTML = roadmapHTML;
+
+            } catch (error) {
+                console.error('Error fetching roadmap:', error);
+                roadmapContainer.innerHTML = '<div class="alert alert-danger">Could not load the course roadmap. Please try again.</div>';
+            }
         });
     });
 });

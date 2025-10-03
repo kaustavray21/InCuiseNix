@@ -24,5 +24,7 @@ urlpatterns = [
 
     # URL for AI Assistant
     path('assistant/', views.gemini_assistant_view, name='gemini_assistant'),
-]
+
+    # ADD THIS NEW URL FOR THE COURSE DETAILS
+    path('roadmap/<int:course_id>/', views.roadmap_view, name='roadmap'),]
 handler404 = 'core.views.custom_404_view'

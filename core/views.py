@@ -222,3 +222,25 @@ def gemini_assistant_view(request):
             return JsonResponse({'error': 'An error occurred while communicating with the AI service.'}, status=500)
 
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
+
+
+# THIS IS ROADMAP VIEW
+
+@login_required
+def roadmap_view(request, course_id):
+    """
+    Returns the course title and description as JSON for an AJAX request.
+    """
+    course = get_object_or_404(Course, id=course_id)
+    
+    # Security check: Ensure the user is enrolled in the requested course
+    if not Enrollment.objects.filter(user=request.user, course=course).exists():
+        return JsonResponse({'error': 'You are not enrolled in this course.'}, status=403)
+
+    # Prepare the simplified data payload
+    course_data = {
+        'title': course.title,
+        'description': course.description
+    }
+
+    return JsonResponse(course_data)
