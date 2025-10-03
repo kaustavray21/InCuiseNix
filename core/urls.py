@@ -21,5 +21,8 @@ urlpatterns = [
     path('note/add/<int:video_id>/', views.add_note_view, name='add_note'),
     path('note/edit/<int:note_id>/', views.edit_note_view, name='edit_note'),
     path('note/delete/<int:note_id>/', views.delete_note_view, name='delete_note'),
+
+    # URL for AI Assistant
+    path('assistant/', views.gemini_assistant_view, name='gemini_assistant'),
 ]
 handler404 = 'core.views.custom_404_view'

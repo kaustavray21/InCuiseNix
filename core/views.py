@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import Enrollment, Course, Video, Note
 from django.template.defaultfilters import date as _date
+import google.generativeai as genai
+from django.conf import settings
 
 
 # --- User Authentication and Static Pages ---
@@ -179,3 +181,44 @@ def delete_note_view(request, note_id):
     note = get_object_or_404(Note, id=note_id, user=request.user)
     note.delete()
     return JsonResponse({'status': 'success', 'message': 'Note deleted successfully.'})
+
+
+# --- AI Assistant View ---
+@login_required
+def gemini_assistant_view(request):
+    if request.method == 'POST':
+        # 1. Explicitly check if the API key is loaded from settings
+        api_key = settings.GEMINI_API_KEY
+        if not api_key:
+            # Log the error to your server console for debugging
+            print("CRITICAL ERROR: GEMINI_API_KEY is not set in the environment.") 
+            # Return a specific error to the frontend
+            return JsonResponse({
+                'error': 'The AI Assistant is not configured correctly. Please contact support.'
+            }, status=500)
+
+        data = json.loads(request.body)
+        prompt = data.get('prompt')
+
+        if not prompt:
+            return JsonResponse({'error': 'A prompt is required.'}, status=400)
+
+        try:
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel('gemini-2.0-flash-exp')
+            response = model.generate_content(prompt)
+
+            # The API can sometimes return an empty response, handle that here.
+            if response.parts:
+                return JsonResponse({'response': response.text})
+            else:
+                return JsonResponse({'response': "I'm not sure how to respond to that. Could you try rephrasing?"})
+
+
+        except Exception as e:
+            # Log the detailed error from the API to your server console
+            print(f"An error occurred with the Gemini API: {e}") 
+            # Return a generic but helpful error to the frontend
+            return JsonResponse({'error': 'An error occurred while communicating with the AI service.'}, status=500)
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)

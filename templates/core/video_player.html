@@ -3,6 +3,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/video_player.css' %}">
+    <link rel="stylesheet" href="{% static 'css/assistant.css' %}"> 
 {% endblock %}
 
 {% block content %}
@@ -18,9 +19,12 @@
     {% include 'core/components/video_player/_note_popup.html' %}
 
 
+
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'js/video_player.js' %}" defer></script>
 <script type="module" src="{% static 'js/notes.js' %}" defer></script>
+<script src="{% static 'js/assistant.js' %}" defer></script>
+
 {% endblock %}
