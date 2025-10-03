@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
         settings: ['captions', 'speed', 'loop'],
         youtube: {
             rel: 0, // Hides the grid of related videos when the video ends.
+            cc_load_policy: 1,
+            noCookie: true,
         }
     });
 

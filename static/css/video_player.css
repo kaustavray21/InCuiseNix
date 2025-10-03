@@ -180,3 +180,10 @@
 }
 /* --- END: Note Detail Pop-up Card Styles --- */
 
+
+/* --- START: Force Hide YouTube Overlays --- */
+.plyr--youtube .ytp-pause-overlay,
+.plyr--youtube .ytp-endscreen-content {
+    display: none !important;
+}
+/* --- END: Force Hide YouTube Overlays --- */

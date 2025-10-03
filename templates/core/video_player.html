@@ -6,144 +6,21 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-4 pb-5" id="player-data-container" 
-    data-video-id="{{ current_video.id }}"
-    data-csrf-token="{{ csrf_token }}">
+    
+    {% include 'core/components/video_player/_video_player_main.html' %}
+    
+    {% include 'core/components/video_player/_add_note_modal.html' %}
 
-    <div class="row">
-        <div class="col-lg-3">
-            <h4 class="mb-3">Course Playlist</h4>
-            <div class="list-group" style="max-height: 80vh; overflow-y: auto;">
-                {% for video in all_videos %}
-                <a href="{% url 'video_player' course.id %}?vid={{ video.video_id }}" 
-                   class="list-group-item list-group-item-action {% if video.id == current_video.id %}active{% endif %}">
-                    {{ video.title }}
-                </a>
-                {% endfor %}
-            </div>
-        </div>
-        
-        <div class="col-lg-9">
-            <h2 class="mb-4">{{ course.title }}</h2>
-            
-            <div class="video-section-wrapper shadow-sm rounded border p-3 mb-4">
-            
-                <div class="plyr-container">
-                    <div id="player" data-plyr-provider="youtube" data-plyr-embed-id="{{ current_video.video_url|slice:"-11:" }}"></div>
-                </div>
+    {% include 'core/components/video_player/_edit_note_modal.html' %}
 
-                <div class="d-flex align-items-center mt-3">
-                    <h4 class="mb-0">{{ current_video.title }}</h4>
-                    <div class="ms-3">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNoteModal">Add Note</button>
-                        <button type="button" class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#notesOffcanvas">View Notes</button>
-                    </div>
-                </div>
+    {% include 'core/components/video_player/_notes_offcanvas.html' %}
 
-            </div>
-        </div>
-    </div>
-</div>
+    {% include 'core/components/video_player/_note_popup.html' %}
 
-<div class="modal fade" id="addNoteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add a Note</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form id="addNoteForm" method="post" data-video-id="{{ current_video.id }}">
-                <div class="modal-body">
-                    {{ form.video_timestamp }}
-                    <div class="mb-3">
-                        <label for="{{ form.content.id_for_label }}" class="form-label">Note Content</label>
-                        {{ form.content }}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Note</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade" id="editNoteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Note</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form id="editNoteForm">
-                <div class="modal-body">
-                    <textarea id="editNoteContent" class="form-control" rows="4" required></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="notesOffcanvas">
-  <div class="offcanvas-header">
-    <h5 id="notesOffcanvasLabel">My Notes for "{{ current_video.title }}"</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
-  </div>
-  <div class="offcanvas-body" id="notes-list-container">
-    {% for note in notes %}
-    <div class="card mb-3 note-card" 
-         data-note-id="{{ note.id }}"
-         data-full-content="{{ note.content }}"
-         data-meta-info="Timestamp: {{ note.video_timestamp }}s &mdash; Added on: {{ note.created_at|date:'d M Y, H:i' }}">
-        
-        <div class="card-body">
-            <div class="note-status-indicator"></div>
-            <div class="note-text-wrapper">
-                <p class="card-text text-truncate">{{ note.content }}</p>
-                <p class="note-timestamp" data-seconds="{{ note.video_timestamp }}">
-                    Timestamp: {{ note.video_timestamp }}s
-                </p>
-            </div>
-            <div class="note-actions">
-                <button class="note-btn note-btn-edit btn-edit-note"
-                        data-note-id="{{ note.id }}"
-                        data-note-content="{{ note.content }}">
-                    Edit <i class="fas fa-pen-to-square ms-1"></i>
-                </button>
-                <button class="note-btn note-btn-delete btn-delete-note"
-                        data-note-id="{{ note.id }}">
-                    <i class="fas fa-trash-can"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-        <p class="text-muted" id="no-notes-message">You have no notes for this video yet.</p>
-    {% endfor %}
-  </div>
-</div>
-
-<div class="note-popup-overlay" id="note-popup-overlay">
-    <div class="note-popup-card">
-        <div class="status-ind"></div>
-        <div class="right">
-            <p class="text-content" id="popup-note-content"></p>
-            <p class="time" id="popup-note-meta"></p>
-            <div class="button-wrap">
-                <button class="primary-cta" id="popup-close-btn">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'js/video_player.js' %}" defer></script>
 <script type="module" src="{% static 'js/notes.js' %}" defer></script>
 {% endblock %}
-

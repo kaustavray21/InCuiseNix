@@ -8,7 +8,15 @@ from django.views.decorators.http import require_POST
 from .models import Enrollment, Course, Video, Note
 from django.template.defaultfilters import date as _date
 
+
 # --- User Authentication and Static Pages ---
+
+
+def custom_404_view(request, exception):
+    """
+    Redirects any 404 error to the homepage.
+    """
+    return redirect('home')
 
 def home(request):
     """Renders the homepage."""
